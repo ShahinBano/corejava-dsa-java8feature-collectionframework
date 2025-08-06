@@ -1,0 +1,55 @@
+package in.sb.java8.features.predicate;
+
+import java.util.ArrayList;
+import java.util.function.Predicate;
+
+public class EmployeeManagementTest {
+    public static void main(String[] args) {
+        ArrayList<Employee> list = new ArrayList<>();
+        populate(list);
+        Predicate<Employee>p1 = e->e.getName().equalsIgnoreCase("manager");
+        System.out.println("Manager Information");
+        display(p1,list);
+
+        Predicate<Employee>p2 = e->e.getCity().equalsIgnoreCase("blr");
+        System.out.println("Banglore Employee Information");
+        display(p2,list);
+
+        Predicate<Employee>p3 = e->e.getSalary()<1000;
+        System.out.println("Employees whose salary less than 2000 to give increment");
+        display(p3,list);
+
+        System.out.println("All Managers from Bangalore city for Pink Slip:");
+        display(p1.and(p2),list);
+
+        System.out.println("Employees Information who are either Managers or salary <20000");
+        display(p1.or(p3),list);
+
+        System.out.println("All Employees Information who are not managers:");
+        display(p1.negate(),list);
+
+        Predicate<Employee> isCEO=Predicate.isEqual(new Employee("Durga","CEO",30000,"Hyderabad"));
+        Employee e1=new Employee("Durga","CEO",30000,"Hyderabad");
+        Employee e2=new Employee("Sunny","Manager",20000,"Hyderabad");
+
+        System.out.println(isCEO.test(e1));//true
+        System.out.println(isCEO.test(e2));//false
+
+    }
+    private static void populate(ArrayList<Employee> list) {
+        list.add(new Employee("Durga","CEO",60000.00,"Hydrabad"));
+        list.add(new Employee("Sonu","SE",60000.00,"BLR"));
+        list.add(new Employee("Monu","PAT",60000.00,"DELHI"));
+        list.add(new Employee("Lila","Associate",60000.00,"PUNE"));
+        list.add(new Employee("Chunni","TL",60000.00,"LKO"));
+        list.add(new Employee("Paro","Manager",60000.00,"NEW YORK"));
+    }
+    public static void display(Predicate<Employee>p1, ArrayList<Employee>list){
+        for (Employee e : list){
+            if (p1.test(e)){
+                System.out.println(e);
+            }
+        }
+        System.out.println("*******************************************");
+    }
+}
